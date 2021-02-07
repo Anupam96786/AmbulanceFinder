@@ -12,5 +12,5 @@ def get_hospitals(request):
     longitude = float(request.data['long'])
     latitude = float(request.data['lat'])
     user_location = Point(longitude, latitude, srid=4326)
-    hospitals = serialize('geojson', queryset = Hospital.objects.annotate(distance=Distance('location', user_location)).order_by('distance')[0:6])
+    hospitals = serialize('geojson', queryset = Hospital.objects.annotate(distance=Distance('location', user_location)).order_by('distance')[0:10])
     return Response(data={'data': json.loads(hospitals)})

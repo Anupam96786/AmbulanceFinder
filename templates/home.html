@@ -32,7 +32,7 @@
         function map_init_basic(map, options) {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function (position) {
-                    map.setView([position.coords.latitude, position.coords.longitude], 12);
+                    map.setView([position.coords.latitude, position.coords.longitude], 14);
                     $.ajax({
                         type: "POST",
                         url: "{% url 'get_nearby_hospitals' %}",
@@ -43,6 +43,7 @@
                         data: { "lat": position.coords.latitude, "long": position.coords.longitude },
                         success: function (result) {
                             var data;
+                            console.log(result);
                             for (let index = 0; index < result['data']['features'].length; index++) {
                                 data = result['data']['features'][index];
                                 L.marker(data['geometry']['coordinates'].reverse()).addTo(map).bindPopup("name : " + data['properties']['name'] + "<br>" + "landmark : " + data['properties']['landmark'])
