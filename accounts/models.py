@@ -32,6 +32,7 @@ class AccountType(models.Model):
 
 class Users(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, verbose_name='User', blank=False, null=False)
+    phone = models.CharField(max_length=10)
     address = models.CharField('Address', max_length=100, blank=True, null=True)    # user home address
 
     class Meta:

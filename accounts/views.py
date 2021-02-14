@@ -1,7 +1,7 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import login
+from django.shortcuts import render, redirect, HttpResponseRedirect
+from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
-from .models import Users, AmbulanceHub, Ambulance, Token
+from .models import Users, AmbulanceHub, Ambulance, Token, AccountType
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 
@@ -9,9 +9,9 @@ from django.core.mail import EmailMessage
 def create_user(request):
     if request.method == 'POST':
         if User.objects.filter(email=request.data['email']):
-            return render(request, 'login.html', {'message': 'This email is already registered'})
+            return render(request, 'user_signup.html', {'message': 'This email is already registered'})
         elif User.objects.filter(username=request.data['username']):
-            return render(request, 'login.html', {'message': 'This username is already taken'})
+            return render(request, 'user_signup.html', {'message': 'This username is already taken'})
         else:
             user = User.objects.create_user(username=request.data['username'], password=request.data['password'], email=request.data['email'])
             user.is_active = False
@@ -23,9 +23,11 @@ def create_user(request):
             mail_body = 'Please click on the link below to activate your account.\n{}://{}/accounts/useractivation/{}'.format(request.scheme, domain, token)
             EmailMessage(mail_subject, mail_body, to=[request.data['email']]).send()
             return render(request, 'user_acc_activation.html')
+    else:
+        return render(request, 'user_signup.html')
 
 
-def user_activation(request):
+def user_activation(request, token):
     if request.method == 'GET':
         try:
             t = Token.objects.get(token=token)
@@ -57,5 +59,4 @@ def user_login(request):
                     return redirect('home')
             else:
                 return render(request, 'login.html', {'message': 'Invalid Credentials'})
-            return render(request, 'login.html')
 
