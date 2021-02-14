@@ -32,7 +32,7 @@ class AccountType(models.Model):
 
 class Users(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, verbose_name='User', blank=False, null=False)
-    phone = models.CharField(max_length=10)
+    phone = models.CharField(max_length=10, default='')
     address = models.CharField('Address', max_length=100, blank=True, null=True)    # user home address
 
     class Meta:
@@ -55,6 +55,7 @@ class Users(models.Model):
 class AmbulanceHub(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, verbose_name='User', blank=False, null=False)
     name = models.CharField(verbose_name='Hub Name', max_length=30, blank=False, null=False)    # Ambulance hub name to be displayed in user panel
+    phone = models.CharField(max_length=10, default='')
     address = models.CharField('Address', max_length=100, blank=True, null=True)
     location = models.PointField('Location', blank=False, null=False)
 
@@ -77,6 +78,7 @@ class AmbulanceHub(models.Model):
 
 class Ambulance(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, verbose_name='User', blank=False, null=False)
+    phone = models.CharField(max_length=10, default='')
     ambulance_no = models.CharField('Ambulance Number', max_length=30, unique=True, blank=False, null=False)
     hub = models.ForeignKey(AmbulanceHub, on_delete=models.CASCADE)
     available = models.BooleanField('Available')
