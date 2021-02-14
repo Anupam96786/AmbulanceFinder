@@ -16,7 +16,7 @@ def create_user(request):
             user = User.objects.create_user(username=request.data['username'], password=request.data['password'], email=request.data['email'])
             user.is_active = False
             user.save()
-            Users.objects.create(user=user, address=request.data['address'])
+            Users.objects.create(user=user, address=request.data['address'], phone=request.data['phone'])
             token = Token.objects.create(user=user, purpose='user_activation').token
             domain = get_current_site(request).domain
             mail_subject = 'Activate your account'
