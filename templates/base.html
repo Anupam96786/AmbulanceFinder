@@ -49,15 +49,15 @@
                         <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                     </li>
                     {% if user.is_authenticated %}
-                    <li class="nav-item">
+                    <li class="nav-item" style="margin-left: 280%;">
                         <a type="button" class="btn btn-danger" href="/accounts/logout">Logout</a>
                     </li>
                     {% else %}
                     <li class="nav-item">
-                        <a type="button" class="btn btn-success" href="/accounts/users/signup/">Sign Up</a>
+                        <a type="button" class="btn btn-success " href="/accounts/users/signup/" >Sign Up</a>
                     </li>
                     <li class="nav-item">
-                        <a type="button" class="btn btn-success" href="/accounts/login">Login</a>
+                        <a type="button" class="btn btn-success" href="/accounts/login" >Login</a>
                     </li>
                     {% endif %}
                 </ul>
