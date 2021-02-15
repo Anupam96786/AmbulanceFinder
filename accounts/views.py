@@ -9,9 +9,9 @@ from django.core.mail import EmailMessage
 def create_user(request):
     if request.method == 'POST':
         if User.objects.filter(email=request.POST['email']):
-            return render(request, 'user_signup.html', {'message': 'This email is already registered'})
+            return render(request, 'user_signup.html', {'message': 1, 'username': request.POST['username'], 'password': request.POST['password'], 'email': request.POST['email'], 'address': request.POST['address'], 'phone': request.POST['phone']})
         elif User.objects.filter(username=request.POST['username']):
-            return render(request, 'user_signup.html', {'message': 'This username is already taken'})
+            return render(request, 'user_signup.html', {'message': 2, 'username': request.POST['username'], 'password': request.POST['password'], 'email': request.POST['email'], 'address': request.POST['address'], 'phone': request.POST['phone']})
         else:
             user = User.objects.create_user(username=request.POST['username'], password=request.POST['password'], email=request.POST['email'])
             user.is_active = False

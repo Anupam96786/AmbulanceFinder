@@ -1,93 +1,44 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-</head>
-<body style="background-color: black;"> <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-            aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Dropdown
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                </li>
-                {% if user.is_authenticated %}
-                <li class="nav-item" style="margin-left: 280%;">
-                    <a type="button" class="btn btn-danger" href="/accounts/logout">Logout</a>
-                </li>
-                {% else %}
-                <li class="nav-item">
-                    <a type="button" class="btn btn-success " href="/accounts/users/signup/" >Sign Up</a>
-                </li>
-                <li class="nav-item">
-                    <a type="button" class="btn btn-success" href="/accounts/login" >Login</a>
-                </li>
-                {% endif %}
-            </ul>
+{% extends 'base.html' %}
+
+{% block title %}
+User Signup
+{% endblock %}
+
+{% block body %}
+<div class="container" style="margin-top: 5%;max-width: 60%; color: blanchedalmond;">
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">USERNAME</label>
+            <input type="text" class="form-control" id="exampleInputEmail1" name="username" value="{{ username }}">
+            {% if message == 2 %}
+            <div id="emailHelp" class="form-text" style="color: red;">This username is already taken</div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Password</label>
+            <input type="password" class="form-control" id="exampleInputPassword1" name="password" value="{{ password }}">
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email" value="{{ email }}">
+            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+            {% if message == 1 %}
+            <div id="emailHelp" class="form-text" style="color: red;">This email is already registered.</div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">ADDRESS</label>
+            <input type="text" class="form-control" id="exampleInputEmail1" name="address" value="{{ address }}">
 
         </div>
-    </div>
-</nav><div class="container" style="margin-top: 5%;max-width: 40%; color: blanchedalmond;"><form method="POST">
-    {% csrf_token %}
-    <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label">USERNAME</label>
-      <input type="text" class="form-control" id="exampleInputEmail1" name="username">
-     
-    </div>
-    <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Password</label>
-        <input type="password" class="form-control" id="exampleInputPassword1" name="password">
-      </div>
-    <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">Email address</label>
-        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email">
-        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-      </div>
-      <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">ADDRESS</label>
-        <input type="text" class="form-control" id="exampleInputEmail1" name="address">
-       
-      </div>
-      <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">PHONE NUMBER</label>
-        <input type="number" class="form-control" id="exampleInputEmail1" name="phone">
-       
-      </div>
-    
-    <div class="mb-3 form-check">
-      <input type="checkbox" class="form-check-input" id="exampleCheck1">
-      <label class="form-check-label" for="exampleCheck1">Check me out</label>
-    </div>
-    <button type="submit" class="btn btn-primary">SIGN UP</button>
-  </form></div>
-    
-</body>
-</html>
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">PHONE NUMBER</label>
+            <input type="number" class="form-control" id="exampleInputEmail1" name="phone" value="{{ phone }}">
+
+        </div>
+
+        <button type="submit" class="btn btn-primary">SIGN UP</button>
+    </form>
+</div>
+{% endblock %}
