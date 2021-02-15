@@ -8,20 +8,20 @@ from django.core.mail import EmailMessage
 
 def create_user(request):
     if request.method == 'POST':
-        if User.objects.filter(email=request.data['email']):
+        if User.objects.filter(email=request.POST['email']):
             return render(request, 'user_signup.html', {'message': 'This email is already registered'})
-        elif User.objects.filter(username=request.data['username']):
+        elif User.objects.filter(username=request.POST['username']):
             return render(request, 'user_signup.html', {'message': 'This username is already taken'})
         else:
-            user = User.objects.create_user(username=request.data['username'], password=request.data['password'], email=request.data['email'])
+            user = User.objects.create_user(username=request.POST['username'], password=request.POST['password'], email=request.POST['email'])
             user.is_active = False
             user.save()
-            Users.objects.create(user=user, address=request.data['address'], phone=request.data['phone'])
+            Users.objects.create(user=user, address=request.POST['address'], phone=request.POST['phone'])
             token = Token.objects.create(user=user, purpose='user_activation').token
             domain = get_current_site(request).domain
             mail_subject = 'Activate your account'
             mail_body = 'Please click on the link below to activate your account.\n{}://{}/accounts/useractivation/{}'.format(request.scheme, domain, token)
-            EmailMessage(mail_subject, mail_body, to=[request.data['email']]).send()
+            EmailMessage(mail_subject, mail_body, to=[request.POST['email']]).send()
             return render(request, 'user_acc_activation.html')
     else:
         return render(request, 'user_signup.html')
@@ -38,6 +38,7 @@ def user_activation(request, token):
                 user.is_active = True
                 user.save()
                 t.delete()
+                login(request, user)
                 return redirect('home')
         except:
             return render(request, 'invalid_link.html')

@@ -27,7 +27,7 @@ class AccountType(models.Model):
     atype = models.CharField(verbose_name='Account Type', choices=account_type, default='user', blank=False, null=False, max_length=20)
 
     def __str__(self):
-        return self.user.username + ' --> ' + self.type
+        return self.user.username + ' --> ' + self.atype
 
 
 class Users(models.Model):
@@ -41,7 +41,7 @@ class Users(models.Model):
 
     def save(self, *args, **kwargs):
         if not AccountType.objects.filter(user=self.user):
-            AccountType.objects.create(user=self.user, type='user')
+            AccountType.objects.create(user=self.user, atype='user')
         super(Users, self).save(*args, **kwargs)
     
     def delete(self, *args, **kwargs):
@@ -65,7 +65,7 @@ class AmbulanceHub(models.Model):
     
     def save(self, *args, **kwargs):
         if not AccountType.objects.filter(user=self.user):
-            AccountType.objects.create(user=self.user, type='ambulance_hub')
+            AccountType.objects.create(user=self.user, atype='ambulance_hub')
         super(AmbulanceHub, self).save(*args, **kwargs)
     
     def delete(self, *args, **kwargs):
@@ -85,7 +85,7 @@ class Ambulance(models.Model):
     
     def save(self, *args, **kwargs):
         if not AccountType.objects.filter(user=self.user):
-            AccountType.objects.create(user=self.user, type='ambulance')
+            AccountType.objects.create(user=self.user, atype='ambulance')
         super(Ambulance, self).save(*args, **kwargs)
     
     def delete(self, *args, **kwargs):
