@@ -13,15 +13,20 @@ Home
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+<style>
+    #hospital {
+        height: 100%;
+    }
+</style>
 
 {% endblock %}
 
 {% block body %}
-<div class="container">
+<div class="container" style="height: 80vh;">
     <div>
         <h1 class="text-center my-4" style="color:white">WELCOME TO AMBULANCE FINDER</h1>
     </div>
-    <div style="margin-left: 15%; margin-top: 5%; margin-right: 15%; height: 100%;">
+    <div style="margin-left: 0%; margin-top: 5%; margin-right: 0%; height: 100%;">
         {% leaflet_map 'hospital' callback="window.map_init_basic" %}
     </div>
 </div>
@@ -40,6 +45,7 @@ Home
     });
     function map_init_basic(map, options) {
         var routingControl = null;
+        var myLocation;
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
                 map.setView([position.coords.latitude, position.coords.longitude], 14);
@@ -64,12 +70,16 @@ Home
                             }
                             routingControl = L.Routing.control({
                                 waypoints: [
-                                    L.latLng(e.latlng),
-                                    L.latLng(position.coords.latitude, position.coords.longitude)
+                                    L.latLng(position.coords.latitude, position.coords.longitude),
+                                    L.latLng(e.latlng)
                                 ]
                             }).addTo(map);
+                            myLocation.removeFrom(map);
+                            myLocation = L.marker([position.coords.latitude, position.coords.longitude], { icon: redIcon });
+                            myLocation.addTo(map)
                         }
-                        L.marker([position.coords.latitude, position.coords.longitude], { icon: redIcon }).addTo(map);
+                        myLocation = L.marker([position.coords.latitude, position.coords.longitude], { icon: redIcon });
+                        myLocation.addTo(map)
                     }
                 });
             });
