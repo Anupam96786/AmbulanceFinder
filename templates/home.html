@@ -10,7 +10,9 @@ Home
 {% load leaflet_tags %}
 {% leaflet_js %}
 {% leaflet_css %}
-<script src="{% static 'dist/leaflet.ajax.js' %}"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 
 {% endblock %}
 
@@ -37,6 +39,7 @@ Home
         shadowSize: [41, 41]
     });
     function map_init_basic(map, options) {
+        var routingControl = null;
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
                 map.setView([position.coords.latitude, position.coords.longitude], 14);
@@ -53,7 +56,18 @@ Home
                         console.log(result);
                         for (let index = 0; index < result['data']['features'].length; index++) {
                             data = result['data']['features'][index];
-                            L.marker(data['geometry']['coordinates'].reverse()).addTo(map).bindPopup("name : " + data['properties']['name'] + "<br>" + "landmark : " + data['properties']['landmark'])
+                            L.marker(data['geometry']['coordinates'].reverse()).on('click', onClick).addTo(map).bindPopup("name : " + data['properties']['name'] + "<br>" + "landmark : " + data['properties']['landmark'])
+                        }
+                        function onClick(e) {
+                            if (routingControl != null) {
+                                map.removeControl(routingControl);
+                            }
+                            routingControl = L.Routing.control({
+                                waypoints: [
+                                    L.latLng(e.latlng),
+                                    L.latLng(position.coords.latitude, position.coords.longitude)
+                                ]
+                            }).addTo(map);
                         }
                         L.marker([position.coords.latitude, position.coords.longitude], { icon: redIcon }).addTo(map);
                     }
